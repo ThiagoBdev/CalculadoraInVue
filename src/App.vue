@@ -1,33 +1,80 @@
 <script setup lang="ts">
-    
+import { ref } from 'vue';
+import CalculoForm from './components/CalculoForm.vue';
+import Resultado from './components/resultado.vue';  
+
+const numero1 = ref<number | null>(null);
+const numero2 = ref<number | null>(null);
+const operador = ref<string>("+");
+const resultado = ref<number | string>("");
+
+function soma(numero1: number, numero2: number): number {
+    return numero1 + numero2;
+}
+
+function subtracao(numero1: number, numero2: number): number {
+    return numero1 - numero2;
+}
+
+function multiplicacao(numero1: number, numero2: number): number {
+    return numero1 * numero2;
+}
+
+function divisao(numero1: number, numero2: number): number {
+    return numero1 / numero2;
+}
+
+function calcular() {
+    if (numero1.value !== null && numero2.value !== null) {
+        switch (operador.value) {
+            case "+":
+                resultado.value = soma(numero1.value, numero2.value);
+                break;
+            case "-":
+                resultado.value = subtracao(numero1.value, numero2.value);
+                break;
+            case "*":
+                resultado.value = multiplicacao(numero1.value, numero2.value);
+                break;
+            case "/":
+                if (numero2.value === 0) {
+                    resultado.value = "Não é possível dividir por 0";
+                } else {
+                    resultado.value = divisao(numero1.value, numero2.value);
+                }
+                break;
+            default:
+                resultado.value = "Operação inválida";
+        }
+    } else {
+        resultado.value = "Por favor, insira ambos os números";
+    }
+}
+
+function updateInputs(data: { num1: number | null; num2: number | null; operator: string }) {
+    numero1.value = data.num1;
+    numero2.value = data.num2;
+    operador.value = data.operator;
+    calcular(); 
+}
 </script>
 
 <template>
-<div class="container">
-    <div class="container2">
-        <header>
-            <h1>Calculadora</h1>
-        </header>
-        <form>
-            <input class="numeros" type="text" id="numero1" placeholder="Escolha um numero:">
-            <select class="numeros">
-                <option>Soma</option>
-                <option>Subtração</option>
-                <option>Multiplicação</option>
-                <option>Divisão</option>
-            </select>
-            <input class="numeros" type="text" id="numero2" placeholder="Escolha outro numero numero:">
-            <div class="resultados">
-                <h3 class="numeros" id="Resultado">Resultado:</h3>
-                <span class="numeros">{{2}}</span>
-            </div>
-        </form>
+    <div class="container">
+        <div class="container2">
+            <header>
+                <h1>Calculadora</h1>
+            </header>
+            <CalculoForm @updateInputs="updateInputs" />
+            <Resultado :resultado="resultado" />
+        </div>
     </div>
-</div>
 </template>
 
 <style lang="scss">
-    $imagemFundo: "https://cdn.pixabay.com/photo/2021/10/05/21/46/math-6683827_1280.png";
+
+$imagemFundo: "https://cdn.pixabay.com/photo/2021/10/05/21/46/math-6683827_1280.png";
+$CorLetras: white;
 
 * {
     margin: 0;
@@ -52,10 +99,9 @@
         justify-content: center;   
         align-items: center;       
         width: 40%;                
-        min-width: 300px;          
         height: auto;              
         background-color: rgba(0,0,0,0.9);
-        border: 2px solid rgba(255,255,255, 0.7);
+        border: 2px solid $CorLetras;
         border-radius: 20px;
         padding: 30px;             
         box-sizing: border-box;
@@ -63,7 +109,7 @@
         header {
             margin-bottom: 20px;
             text-align: center;
-            color: white;
+            color: $CorLetras;
             font-size: 25px;
         }
     
@@ -76,7 +122,7 @@
             border-radius: 10px;
             box-sizing: border-box;
             margin-left: 80px;
-            
+            font-size: medium;
         }
         select {
             text-align: center;
@@ -94,10 +140,8 @@
             text-align: center;
             justify-content: center;
             align-items: center;
-            color: aliceblue;
+            color: $CorLetras;
             margin-top: 20px;
-            background-color: rgba(0,0,0,0.9);
-            border: 2px solid rgba(255,255,255, 0.7);
             font-size: 25px;
 
             span{
@@ -107,6 +151,5 @@
         }
     }
 }
-
 
 </style>
