@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import CalculoForm from './components/CalculoForm.vue';
-import Resultado from './components/resultado.vue';  
+import Resultado from './components/Produto.vue';
+
 
 const numero1 = ref<number | null>(null);
 const numero2 = ref<number | null>(null);
